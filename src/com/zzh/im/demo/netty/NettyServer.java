@@ -1,13 +1,10 @@
 package com.zzh.im.demo.netty;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
-import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.string.StringDecoder;
 
 /**
  * @author <a href="zhangzh950730@gmail.com" >ZhangZhiHao</a>
@@ -24,13 +21,13 @@ public class NettyServer {
                 .channel(NioServerSocketChannel.class)
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     protected void initChannel(NioSocketChannel ch) {
-                        ch.pipeline().addLast(new StringDecoder());
-                        ch.pipeline().addLast(new SimpleChannelInboundHandler<String>() {
-                            @Override
-                            protected void channelRead0(ChannelHandlerContext ctx, String msg) {
-                                System.out.println(msg);
-                            }
-                        });
+                        ch.pipeline().addLast(new ChannelInboundHandlerA());
+                        ch.pipeline().addLast(new ChannelInboundHandlerB());
+                        ch.pipeline().addLast(new ChannelInboundHandlerC());
+
+                        ch.pipeline().addLast(new ChannelOutboundHandlerA());
+                        ch.pipeline().addLast(new ChannelOutboundHandlerB());
+                        ch.pipeline().addLast(new ChannelOutboundHandlerC());
                     }
                 })
                 .bind(8000);
